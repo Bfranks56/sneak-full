@@ -1,0 +1,95 @@
+{
+  "name": "sneak-full",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/sneak-full/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/sneak-full",
+        "index": "apps/sneak-full/src/index.html",
+        "browser": "apps/sneak-full/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/sneak-full/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/sneak-full/public"
+          }
+        ],
+        "styles": ["apps/sneak-full/src/styles.scss"],
+        "scripts": [],
+        "server": "apps/sneak-full/src/main.server.ts",
+        "prerender": true,
+        "ssr": {
+          "entry": "apps/sneak-full/server.ts"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "sneak-full:build:production"
+        },
+        "development": {
+          "buildTarget": "sneak-full:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "sneak-full:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/sneak-full/jest.config.ts"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "sneak-full:build",
+        "port": 4200,
+        "staticFilePath": "dist/apps/sneak-full/browser",
+        "spa": true
+      }
+    }
+  }
+}
